@@ -23,7 +23,7 @@ const request = new Request({
       return res
     },
     responseInterceptorCatch: (err) => {
-      return Promise.reject(err.response)
+      return Promise.reject(err)
     }
   }
 })

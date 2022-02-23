@@ -65,7 +65,7 @@ class Request {
         // 将loading移除
         this.loading?.close()
         ElMessage({
-          message: err?.data || 'Error',
+          message: err.response.data || 'Error',
           type: 'error',
           duration: 5 * 1000
         })
