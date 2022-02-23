@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 import type { RequestInterceptors, RequestConfig } from './type'
 
-import { ElLoading } from 'element-plus'
+import { ElLoading, ElMessage } from 'element-plus'
 import { LoadingInstance } from 'element-plus/lib/components/loading/src/loading'
 
 const DEAFULT_LOADING = true
@@ -64,7 +64,11 @@ class Request {
       (err) => {
         // 将loading移除
         this.loading?.close()
-
+        ElMessage({
+          message: err?.data || 'Error',
+          type: 'error',
+          duration: 5 * 1000
+        })
         // 例子: 判断不同的HttpErrorCode显示不同的错误信息
         if (err.response.status === 404) {
           console.log('404的错误~')
