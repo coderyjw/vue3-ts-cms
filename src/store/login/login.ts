@@ -39,7 +39,6 @@ const loginModule: Module<ILoginState, IRootState> = {
       const { id, token } = loginResult.data
       commit('changeToken', token)
       localCache.setCache('token', token)
-      console.log(id, token)
 
       // 2.请求用户信息
       const userInfoResult = await requestUserInfoById(id)
