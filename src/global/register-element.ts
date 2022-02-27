@@ -79,6 +79,7 @@ const components = [
   ElIcon
 ]
 
+console.log(ElSubMenu.name)
 export default function (app: App): void {
   for (const component of components) {
     app.component(component.name, component)
