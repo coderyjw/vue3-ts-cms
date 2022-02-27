@@ -84,7 +84,7 @@ export default defineComponent({
   text-align: left;
   cursor: pointer;
   background-color: #001529;
-  transition: width 0.3s linear;
+  transition: width 0.25s linear;
   scrollbar-width: none; /* firefox */
   -ms-overflow-style: none; /* IE 10+ */
 

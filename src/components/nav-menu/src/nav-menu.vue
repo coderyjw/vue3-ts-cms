@@ -2,11 +2,12 @@
   <div class="nav-menu">
     <div class="logo">
       <img class="img" src="~@/assets/img/logo.svg" alt="logo" />
-      <span class="title">Vue3+TS</span>
+      <span v-if="!collapse" class="title">Vue3+TS</span>
     </div>
     <el-menu
       default-active="2"
       class="el-menu-vertical"
+      :collapse="collapse"
       text-color="#b7bdc3"
       background-color="#0c2135"
       active-text-color="#0a60bd"
@@ -17,7 +18,9 @@
           <!-- 二级菜单的可以展开的标题 -->
           <el-sub-menu :index="item.id + ''">
             <template #title>
-              <i v-if="item.icon" :class="item.icon"></i>
+              <el-icon v-if="item.icon">
+                <component :is="item.icon" />
+              </el-icon>
               <span>{{ item.name }}</span>
             </template>
             <!-- 遍历里面的item -->
@@ -42,14 +45,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, markRaw } from 'vue'
 import { useStore } from '@/store'
+import { Monitor, Setting, Goods, ChatLineRound } from '@element-plus/icons-vue'
 
 export default defineComponent({
+  props: {
+    collapse: {
+      type: Boolean,
+      default: false
+    }
+  },
   setup() {
     const store = useStore()
 
     const userMenus = computed(() => store.state.login.userMenus)
+    userMenus.value.forEach((c: any) => {
+      if (c.icon.includes('monitor')) {
+        c.icon = markRaw(Monitor)
+      } else if (c.icon.includes('setting')) {
+        c.icon = markRaw(Setting)
+      } else if (c.icon.includes('goods')) {
+        c.icon = markRaw(Goods)
+      } else if (c.icon.includes('chat')) {
+        c.icon = markRaw(ChatLineRound)
+      }
+    })
     return { userMenus }
   }
 })
