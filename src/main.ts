@@ -15,7 +15,6 @@ const app = createApp(App)
 app.use(globalRegister)
 app.use(store)
 setupStore()
-// path: /user => user
 app.use(router)
 
 app.mount('#app')
