@@ -25,7 +25,10 @@
             </template>
             <!-- 遍历里面的item -->
             <template v-for="subitem in item.children" :key="subitem.id">
-              <el-menu-item :index="subitem.id + ''">
+              <el-menu-item
+                :index="subitem.id + ''"
+                @click="handleMenuItemClick(subitem)"
+              >
                 <i v-if="subitem.icon" :class="subitem.icon"></i>
                 <span>{{ subitem.name }}</span>
               </el-menu-item>
@@ -48,7 +51,7 @@
 import { defineComponent, computed, markRaw } from 'vue'
 import { useStore } from '@/store'
 import { Monitor, Setting, Goods, ChatLineRound } from '@element-plus/icons-vue'
-
+import { useRouter } from 'vue-router'
 export default defineComponent({
   props: {
     collapse: {
@@ -60,7 +63,10 @@ export default defineComponent({
     const store = useStore()
 
     const userMenus = computed(() => store.state.login.userMenus)
-    userMenus.value.forEach((c: any) => {
+    const router = useRouter()
+
+    userMenus.value?.forEach((c: any) => {
+      if (typeof c.icon !== 'string') return
       if (c.icon.includes('monitor')) {
         c.icon = markRaw(Monitor)
       } else if (c.icon.includes('setting')) {
@@ -71,7 +77,13 @@ export default defineComponent({
         c.icon = markRaw(ChatLineRound)
       }
     })
-    return { userMenus }
+
+    const handleMenuItemClick = (item: any) => {
+      router.push({
+        path: item.url ?? '/not-found'
+      })
+    }
+    return { userMenus, handleMenuItemClick }
   }
 })
 </script>
