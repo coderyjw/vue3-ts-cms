@@ -1,6 +1,11 @@
 <template>
   <div class="page-content">
-    <hy-table :listData="dataList" v-bind="contentTableConfig">
+    <hy-table
+      :listData="dataList"
+      v-bind="contentTableConfig"
+      :listCount="dataCount"
+      v-model:page="pageInfo"
+    >
       <!-- 1.header中的插槽 -->
       <template #headerHandler>
         <el-button type="primary" size="medium">新建用户</el-button>
@@ -57,7 +62,7 @@ export default defineComponent({
     const store = useStore()
 
     // 1.双向绑定pageInfo
-    const pageInfo = ref({ currentPage: 0, pageSize: 10 })
+    const pageInfo = ref({ currentPage: 1, pageSize: 10 })
     watch(pageInfo, () => getPageData())
 
     // 2.发送网络请求
@@ -65,7 +70,7 @@ export default defineComponent({
       store.dispatch('system/getPageListAction', {
         pageName: props.pageName,
         queryInfo: {
-          offset: pageInfo.value.currentPage * pageInfo.value.pageSize,
+          offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
           size: pageInfo.value.pageSize,
           ...queryInfo
         }
@@ -73,16 +78,20 @@ export default defineComponent({
     }
     getPageData()
 
+    // 3.从vuex中获取数据
     const dataList = computed(() =>
       store.getters[`system/pageListData`](props.pageName)
     )
-    // const userCount = computed(() => store.state.system.userCount)
-
+    const dataCount = computed(() =>
+      store.getters[`system/pageListCount`](props.pageName)
+    )
     return {
       dataList,
       Edit,
       Delete,
-      getPageData
+      getPageData,
+      dataCount,
+      pageInfo
     }
   }
 })

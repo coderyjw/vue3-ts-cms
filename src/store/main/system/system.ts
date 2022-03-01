@@ -32,12 +32,11 @@ const systemModule: Module<ISystemState, IRootState> = {
     pageListData(state) {
       return (pageName: string) => {
         return (state as any)[`${pageName}List`]
-        // switch (pageName) {
-        //   case 'users':
-        //     return state.usersList
-        //   case 'role':
-        //     return state.roleList
-        // }
+      }
+    },
+    pageListCount(state) {
+      return (pageName: string) => {
+        return (state as any)[`${pageName}Count`]
       }
     }
   },
