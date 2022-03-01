@@ -8,7 +8,7 @@
     >
       <!-- 1.header中的插槽 -->
       <template #headerHandler>
-        <el-button type="primary" size="medium">新建用户</el-button>
+        <el-button type="primary">新建用户</el-button>
       </template>
 
       <!-- 2.列中的插槽 -->
@@ -32,6 +32,17 @@
           <el-button :icon="Edit" size="small" type="text">编辑</el-button>
           <el-button :icon="Delete" size="small" type="text">删除</el-button>
         </div>
+      </template>
+
+      <!-- 在page-content中动态插入剩余的插槽 -->
+      <template
+        v-for="item in otherPropSlots"
+        :key="item.prop"
+        #[item.slotName]="scope"
+      >
+        <template v-if="item.slotName">
+          <slot :name="item.slotName" :row="scope.row"></slot>
+        </template>
       </template>
     </hy-table>
   </div>
@@ -85,13 +96,25 @@ export default defineComponent({
     const dataCount = computed(() =>
       store.getters[`system/pageListCount`](props.pageName)
     )
+
+    // 4.获取其他的动态插槽名称
+    const otherPropSlots = props.contentTableConfig?.propList.filter(
+      (item: any) => {
+        if (item.slotName === 'status') return false
+        if (item.slotName === 'createAt') return false
+        if (item.slotName === 'updateAt') return false
+        if (item.slotName === 'handler') return false
+        return true
+      }
+    )
     return {
       dataList,
       Edit,
       Delete,
       getPageData,
       dataCount,
-      pageInfo
+      pageInfo,
+      otherPropSlots
     }
   }
 })
