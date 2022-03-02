@@ -55,8 +55,12 @@ class Request {
         this.loading?.close()
 
         const data = res.data
-        if (data.returnCode === '-1001') {
-          console.log('请求失败~, 错误信息')
+        if (data.code != 0) {
+          ElMessage({
+            message: data.data || 'Error',
+            type: 'error',
+            duration: 5 * 1000
+          })
         } else {
           return data
         }
